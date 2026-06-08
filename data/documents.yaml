@@ -1,0 +1,70 @@
+# Document register — the SINGLE source of truth for every official document on the file.
+# sources/README.md is its *rendered* table (edit this YAML, then mirror the table; never the table alone).
+#
+# TEMPLATE NOTE: the rows below are EXAMPLE entries from the reference file 2025/0360 (COD),
+# kept to show the schema and every field in use. Replace them with your file's documents
+# (use the `register-document` skill — it appends here and renders sources/README.md).
+#
+# Field reference:
+#   id            stable institutional id (COM-…, ST-…, WK-…, CM-…, OEIL-…, EDPB-EDPS-…, ECB-…, EESC-…)
+#   title         quoted descriptive title
+#   body          institution: Commission | Council | Parliament | EDPB-EDPS | ECB | EESC | <Member State> | …
+#   date          ISO YYYY-MM-DD
+#   limite        bool — true for Council LIMITE documents
+#   url           authoritative URL (also: celex)
+#   mirror        public copy when the authoritative URL is restricted (LIMITE)
+#   register      Council register reference
+#   national_parliament  national-parliament record hosting a LIMITE text
+#   local / local_cover / local_annex / local_init / local_add1…  committed file path(s)
+#   access        omit = fully public; else cite-only | screenshot-only | not-public |
+#                 public-released | public-via-register | public-via-journalist | public-via-national-parliament
+#   leading_service / mandatory_consultees / notes   prose context (notes is a `>-` block)
+
+documents:
+  - id: COM-2025-837
+    title: "Digital Omnibus — proposal for a Regulation (digital simplification: GDPR, ePrivacy, P2B, cyber)"
+    body: Commission
+    date: 2025-11-19
+    limite: false
+    url: https://eur-lex.europa.eu/procedure/EN/2025_360
+    celex: https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0837
+    local: sources/commission/COM-2025-837_proposal_2025-11-19.docx
+    local_annex: sources/commission/COM-2025-837_annex1-correlation-tables_2025-11-19.docx
+    leading_service: "Lead service DG CNECT; political leads EVP Virkkunen and Commissioner McGrath."
+    mandatory_consultees: European Committee of the Regions, European Central Bank, European Economic and Social Committee
+    notes: >-
+      EXAMPLE row. The proposal this reference repo tracks. Accompanied by SWD(2025) 836; base-text
+      operative extracts in extracts/commission/. Annex I = correlation tables.
+
+  - id: EDPB-EDPS-JO-2-2026
+    title: "EDPB–EDPS Joint Opinion 2/2026 on the Digital Omnibus"
+    body: EDPB-EDPS
+    date: 2026-02-10
+    limite: false
+    url: https://www.edpb.europa.eu/our-work-tools/our-documents/edpbedps-joint-opinion/edpb-edps-joint-opinion-22026-proposal_en
+    local: sources/edpb-edps/EDPB-EDPS-JO-2-2026_opinion_2026-02-10.pdf
+    notes: >-
+      EXAMPLE row (advisory-body opinion). Digest: docs/advisory/edpb-edps-jo-2-2026.md.
+
+  - id: ST-9547-2026
+    title: "Presidency revised compromise text (GDPR, ePrivacy, cookies, P2B, cyber)"
+    body: Council
+    date: 2026-05-21
+    limite: true
+    access: public-via-national-parliament
+    register: https://data.consilium.europa.eu/doc/document/ST-9547-2026-INIT/en/pdf   # 404 until released
+    national_parliament: https://www.parlament.gv.at/gegenstand/XXVIII/EU/73322
+    local: sources/council/ST-9547-2026_council-presidency-compromise_2026-05-21.pdf
+    notes: >-
+      EXAMPLE row (Council LIMITE compromise text). Operative text in extracts/council/ (the shipped
+      example set). Shows the LIMITE provenance fields (register + national_parliament + access).
+
+  - id: OEIL-2025-0360
+    title: "Procedure file 2025/0360(COD) — Simplification of the digital legislative framework"
+    body: Parliament
+    date: 2026-01-19
+    limite: false
+    url: https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0360(COD)
+    notes: >-
+      EXAMPLE row (Parliament procedure file — link-only, no committed file). Joint committee
+      responsible (Rule 59): ITRE + LIBE; opinions JURI + IMCO.

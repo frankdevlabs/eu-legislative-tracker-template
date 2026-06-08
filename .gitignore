@@ -1,0 +1,17 @@
+# LIMITE / Council PDFs are intentionally committed in this repo (see NOTICE §2).
+# Keep individual files well under GitHub's 100 MB hard limit (50 MB triggers a warning).
+# If a source ever exceeds ~50 MB, track it with Git LFS instead of committing directly.
+
+# Local scratch
+/tmp/
+*.tmp
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+
+# Python build artifacts (skill drivers)
+__pycache__/
+*.pyc

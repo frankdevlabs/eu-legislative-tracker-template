@@ -1,0 +1,35 @@
+NOTICE — third-party material and EU documents
+==============================================
+
+1. EU INSTITUTIONAL DOCUMENTS
+   This repository tracks EU legislative documents (Commission proposals, Council compromise
+   texts, European Parliament reports, EDPB/EDPS opinions, etc.). Those documents are the work
+   of the EU institutions, not of this repository's maintainer, and are NOT covered by the
+   CC BY 4.0 licence in the LICENSE file.
+
+   - Legislative texts of the EU are, as a rule, not subject to copyright, and the Commission's
+     reuse policy (Decision 2011/833/EU) generally permits reuse of Commission documents with
+     attribution. Council and Parliament documents have their own reuse terms.
+   - Operative-text EXTRACTS in extracts/ are transcriptions of such documents, provided for
+     tracking and diffing. They are reproduced as primary legal source material and carry the
+     maintainer's annotations (which ARE under CC BY 4.0); the underlying legal wording is the
+     institutions'.
+
+2. LIMITE COUNCIL DOCUMENTS
+   Some Council documents in sources/ are marked "LIMITE" — a limited-distribution marking used
+   by the Council (it is NOT a security classification and these documents are unclassified).
+   This repository hosts copies of such documents for transparency and research, on the basis
+   that they concern legislation of high public interest and are already in public circulation
+   (via national parliaments and journalists). The maintainer publishes them in a personal
+   capacity and takes sole responsibility for that choice; see DISCLAIMER.md.
+
+   For each hosted document the register (sources/README.md) also records the document number,
+   the authoritative Council register reference, and — where available — the national-parliament
+   record and/or a public mirror, so provenance is always traceable.
+
+   If you are an institutional rightsholder and have a concern about a specific file, open an
+   issue and it will be addressed.
+
+3. STAKEHOLDER MATERIAL
+   Quotations from regulators, NGOs, law firms and industry are short, attributed, and used for
+   identification and commentary. Copyright in those works remains with their authors.

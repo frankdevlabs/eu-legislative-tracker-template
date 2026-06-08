@@ -1,0 +1,9 @@
+# Tracker state — auto-maintained by the daily tracker routine. Do not edit by hand.
+#
+# The routine (see SETUP.md "Wire the daily tracker") hashes each watched source in
+# tracker.yaml (`watchlist.sources`) and records the last-seen hash here, keyed by the
+# same T1-*/T2-*/T3-* codes. STATUS.md's "As of" date = this file's `last_run`.
+#
+# Ships EMPTY — the first tracker run populates it. Nothing to seed by hand.
+last_run: null
+sources: {}

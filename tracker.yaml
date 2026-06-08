@@ -1,0 +1,141 @@
+# ============================================================================
+# tracker.yaml — the SINGLE source of truth for this tracker's file identity.
+#
+# This is the one place that says *which* EU file this repo follows. Everything
+# else (CLAUDE.md, README.md, STATUS.md, the skills' scope checks) reads from
+# here or is filled from here by `python3 bootstrap.py`.
+#
+# It ships FILLED IN with file 2025/0360 (COD) — the Digital Omnibus — as a
+# complete worked example, matching the EXAMPLE content elsewhere in the repo.
+# To start a new tracker:
+#   1. Replace every value below with your file's.
+#   2. Run `python3 bootstrap.py` to push the <PLACEHOLDER> tokens into the
+#      static docs (CLAUDE.md, README.md, STATUS.template.md -> STATUS.md).
+#   3. Replace the EXAMPLE-marked content (see SETUP.md).
+# See SETUP.md for the full checklist.
+# ============================================================================
+
+# --- Identity ---------------------------------------------------------------
+file_id: "2025/0360 (COD)"                # interinstitutional file number + procedure type
+short_name: "Digital Omnibus (data/cyber)"
+strand: "GDPR, ePrivacy/cookies, P2B, cyber incident-reporting"
+
+proposal:
+  id: "COM(2025) 837"                     # Commission proposal id (without "final")
+  date: "2025-11-19"                      # ISO
+  swd: "SWD(2025) 836"                    # accompanying staff working doc, if any
+  celex: "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:52025PC0837"
+  oeil: "https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0360(COD)"
+
+# Sibling file(s) that are easy to confuse with this one and must NOT be tracked
+# here. Drives the scope-guard text in CLAUDE.md/README and the skills' scope rule.
+keep_apart:
+  - file_id: "2025/0359 (COD)"
+    note: "AI-Act Digital Omnibus — a separate, faster file on the AI Act strand"
+
+legal_bases: ["Article 16(2) TFEU", "Article 114 TFEU"]
+
+# Existing laws this file amends/repeals. Drives docs/instruments/ pages.
+instruments:
+  - { name: "GDPR", celex: "2016/679" }
+  - { name: "ePrivacy Directive", celex: "2002/58" }
+  - { name: "NIS2 Directive", celex: "2022/2555" }
+  - { name: "P2B Regulation", celex: "2019/1150" }
+
+# The per-version operative-text file set under extracts/. EACH compromise
+# version gets one file per slice, named ST-<nnnn>-<yyyy>_<slice>.md, so
+# `git diff` between versions lines up. For another file these slices differ —
+# they follow your file's article groupings, not these.
+extract_slices:
+  - gdpr-art3-amendments
+  - eprivacy-art5
+  - cyber-art6-9
+  - final-art10-11
+  - recitals
+  # 2025/0360 also carries these informational cross-ref slices in some versions:
+  - dataact-art1
+  - sdg-art2
+  - eudpr-art4
+
+# OLP actor skeleton for STATUS.md "Where each institution stands".
+co_legislators:
+  council:
+    config: "working party / Antici Group (Simplification)"
+  parliament:
+    committees_responsible: ["ITRE", "LIBE"]   # joint, Rule 59
+    committees_opinion: ["IMCO", "JURI"]
+
+# Advisory bodies that must be / have been consulted (drives the STATUS advisory table).
+advisory_bodies: ["EDPB-EDPS", "ECB", "EESC", "CoR"]
+
+# ============================================================================
+# Watchlist — the sources the daily tracker monitors. Consumed by
+# .claude/skills/resolve-tracker-issue (tracker_issues.py joins each flagged
+# "[tracker]" issue to its `affects` list). The same mapping must be mirrored in
+# the cron prompt (~/law-tracker/prompt.md) — keep the two in sync.
+#
+# This ships with a REPRESENTATIVE SUBSET of the 35 sources used for 2025/0360
+# (full list lived in the old data/watchlist.yaml). Replace with your file's
+# sources. Fields per source:
+#   tier        T1 (institutional) | T2 (stakeholder) | T3 (social)
+#   kind        institutional | stakeholder | social
+#   label       human-readable name (matches the issue body "**Source:**")
+#   url         watched URL (T1/T2); omitted for T3 (Bluesky uses handle/did)
+#   handle/did  Bluesky actor (T3 only)
+#   document_id optional join to data/documents.yaml (when the source IS a doc)
+#   affects     downstream files/dirs to review on a substantive hit
+#   notes       fetch quirks / scope rules
+# ============================================================================
+watchlist:
+  sources:
+    # --- Tier 1: institutional ---------------------------------------------
+    T1-01:
+      tier: T1
+      kind: institutional
+      label: "OEIL — Parliament procedure file (HTML)"
+      url: "https://oeil.europarl.europa.eu/oeil/en/procedure-file?reference=2025/0360(COD)"
+      document_id: OEIL-2025-0360
+      affects: [STATUS.md, TIMELINE.md]
+    T1-03:
+      tier: T1
+      kind: institutional
+      label: "EUR-Lex Cellar — Commission proposal (CELEX 52025PC0837)"
+      url: "https://publications.europa.eu/resource/celex/52025PC0837"
+      document_id: COM-2025-837
+      affects: [extracts/commission/, STATUS.md, TIMELINE.md]
+      notes: "Machine-readable fallback for AWS-WAF-blocked EUR-Lex pages. Base text rarely changes."
+    T1-09:
+      tier: T1
+      kind: institutional
+      label: "Austrian Parliament — EU dossier (hosts Council LIMITE texts)"
+      url: "https://www.parlament.gv.at/gegenstand/XXVIII/EU/73322"
+      affects: [extracts/council/, docs/provisions/, STATUS.md, TIMELINE.md, docs/institutional-positions.md, data/positions.csv]
+      notes: "HIGHEST PRIORITY for new Council LIMITE compromise texts. A new ST version -> hand off to the transcribe-council-extract skill, then cascade through provisions/positions."
+    T1-13:
+      tier: T1
+      kind: institutional
+      label: "EDPB–EDPS Joint Opinion"
+      url: "https://www.edpb.europa.eu/our-work-tools/our-documents/edpbedps-joint-opinion/edpb-edps-joint-opinion-22026-proposal_en"
+      document_id: EDPB-EDPS-JO-2-2026
+      affects: [docs/advisory/edpb-edps-jo-2-2026.md, docs/institutional-positions.md]
+    # --- Tier 2: NGO / journalism / law firm -------------------------------
+    T2-01:
+      tier: T2
+      kind: stakeholder
+      label: "noyb — RSS"
+      url: "https://noyb.eu/en/rss"
+      affects: [docs/stakeholders.md, docs/fault-lines.md]
+    T2-02:
+      tier: T2
+      kind: stakeholder
+      label: "EDRi — feed"
+      url: "https://edri.org/feed/"
+      affects: [docs/stakeholders.md, docs/fault-lines.md]
+    # --- Tier 3: Bluesky watchlist -----------------------------------------
+    T3-02:
+      tier: T3
+      kind: social
+      label: "Bluesky — noyb.eu"
+      handle: "noyb.eu"
+      did: "did:plc:6tig4nnvqut4jhyxmvqbxbag"
+      affects: [docs/stakeholders.md, docs/fault-lines.md]
