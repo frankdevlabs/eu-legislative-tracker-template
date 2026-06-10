@@ -131,6 +131,18 @@ watchlist:
       label: "EDRi — feed"
       url: "https://edri.org/feed/"
       affects: [docs/stakeholders.md, docs/fault-lines.md]
+    # KEEP for any file: unlike the example sources above, this one is
+    # file-agnostic. Consilium's meeting/main-results pages serve a
+    # browser-check page to curl, so a tracker cannot poll Council outcomes
+    # directly — this feed mirrors them (e.g. TTE/Telecom Council "main
+    # results"). Filter on your file's keywords; treat a match on the lead
+    # Council formation as Tier-1-grade signal.
+    T2-03:
+      tier: T2
+      kind: stakeholder
+      label: "INSIGHT EU MONITORING — RSS"
+      url: "https://ieu-monitoring.com/feed/"
+      affects: [STATUS.md, TIMELINE.md, docs/institutional-positions.md]
     # --- Tier 3: Bluesky watchlist -----------------------------------------
     T3-02:
       tier: T3

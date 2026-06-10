@@ -74,6 +74,14 @@ your `watchlist.sources` (keep the two in sync). Triage each issue with the **`r
 skill (`/tracker-issue <n>`) — it joins the issue to its `affects` list and drafts one focused plan under
 `docs/triage/`. `STATUS.md`'s **As of** date = `tracker-state.yaml` `last_run`.
 
+Two lessons worth baking into your cron prompt:
+
+- **Council outcomes need a mirror.** consilium.europa.eu serves a browser-check page to curl, so
+  meeting outcomes ("main results") are invisible to the tracker — keep the shipped
+  `INSIGHT EU MONITORING` source (T2-03, file-agnostic) and filter it on your file's keywords.
+- **New-source baseline rule.** When a source is added to the watchlist later, its first poll has no
+  stored hash — instruct the tracker to store the baseline silently instead of opening a false hit.
+
 ## 5. Sanity check
 
 ```bash
