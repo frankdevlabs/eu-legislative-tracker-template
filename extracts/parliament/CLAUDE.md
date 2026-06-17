@@ -2,7 +2,8 @@
 
 > **OPTIONAL layer.** This directory holds European Parliament committee-text extracts. It is only
 > relevant while the file this repo tracks has a live EP stage — omit/ignore it for already-adopted
-> directives or post-adoption files with no live Parliament reading. See [`../../SETUP.md`](../../SETUP.md).
+> directives or post-adoption files with no live Parliament reading. See `SETUP.md` (template only) for
+> when to keep this layer.
 
 Before adding or editing any file in this directory, read
 [`_TRANSCRIPTION_GUIDE.md`](./_TRANSCRIPTION_GUIDE.md) and follow it. It is the canonical standard
