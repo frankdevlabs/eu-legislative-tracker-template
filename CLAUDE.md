@@ -34,6 +34,11 @@ structured identically so `git diff` between versions is meaningful. The slices 
 in [`tracker.yaml`](tracker.yaml) (`extract_slices`) — for this file: `_gdpr-art3-amendments`,
 `_eprivacy-art5`, `_cyber-art6-9`, `_final-art10-11`, `_recitals` (plus informational cross-ref slices).
 The shipped EXAMPLE set is the Commission baseline + Council `ST-9547-2026`.
+`extracts/parliament/` holds **EP committee texts** (draft opinions, draft reports, tabled amendments),
+**one file per committee document** (`<CMTE>-PA-<number>_draft-opinion.md`, …). These are *not*
+consolidated like the Council texts — they are discrete numbered amendments in two-column tables,
+transcribed as tabled (see `extracts/parliament/_TRANSCRIPTION_GUIDE.md`). This layer is **optional** —
+relevant only while the file has a live EP stage.
 
 ## Single sources of truth (don't hand-edit downstream copies)
 
@@ -79,6 +84,27 @@ Transcribe the **consolidated** result (changes applied, markup not reproduced),
 onto an earlier text). Mark whole-provision deletions `[DELETED in ST <nnnn>/26]`, undecided source
 brackets `[...]` preserved as-is, illegible passages `[illegible in source]`. Then branch
 `extracts/st-<nnnn>-<yyyy>`, commit the file-set (not the `/tmp` PNGs), and PR to `main`.
+
+## Adding an EP committee text (draft opinion / report / amendments)
+
+When a Parliament committee text on the file appears (from the committees in `tracker.yaml`
+`co_legislators.parliament`), **use the `transcribe-parliament-extract` skill**; rules live in
+`extracts/parliament/_TRANSCRIPTION_GUIDE.md`. Unlike Council texts there is no tracked-change redline
+to recover — transcribe the discrete amendments as tabled (so `pdf_changes.py` does **not** apply). The
+**primary** read method is the **Read tool on the committed PDF** (it renders the pages); `render_pdf.py`
+is an optional cross-check only if pymupdf is available.
+
+Two recurring traps:
+- **Scope.** A committee can opine on *both* sibling files — confirm the doc's own interinstitutional
+  reference matches this repo's `file_id` (`tracker.yaml`), not a `keep_apart` sibling. Check the
+  rapporteur too (the same committee can have a different rapporteur on each sibling file). A
+  listing-page summary can mis-attribute a row; the cover page is the tie-breaker.
+- **doceo is WAF-blocked.** `www.europarl.europa.eu/doceo/...` returns HTTP 202 (AWS-WAF JS challenge)
+  to all non-browser clients, for both `.pdf` and `.docx` — `curl`/WebFetch get 0 bytes. Confirm
+  existence/metadata via the committee *documents* pages and OEIL, but obtain the operative text via a
+  **browser download** or a non-WAF mirror, commit it under `sources/parliament/`, then transcribe. If
+  only metadata is confirmed, register metadata-only and set `pending_operative_text: true` — never
+  assert per-provision content from a screenshot or a journalist's summary.
 
 ## Conventions
 

@@ -18,6 +18,8 @@
 #   local / local_cover / local_annex / local_init / local_add1…  committed file path(s)
 #   access        omit = fully public; else cite-only | screenshot-only | not-public |
 #                 public-released | public-via-register | public-via-journalist | public-via-national-parliament
+#   lead_source   credit for a Tier-2/3/external lead that surfaced the doc (name+handle, watchlist
+#                 code, tip URL+date) — set when a register run was triggered by a tip, not a Tier-1 feed
 #   leading_service / mandatory_consultees / notes   prose context (notes is a `>-` block)
 
 documents:

@@ -50,6 +50,7 @@ Everything still carrying 2025/0360 substance is marked `EXAMPLE` — replace it
 |---|---|---|
 | `extracts/commission/` | `COM-2025-837_*` base-text set | your Commission proposal's operative text (one file per `extract_slices`) |
 | `extracts/council/` | `ST-9547-2026_*` one version set | your file's compromise versions (use the `transcribe-council-extract` skill) |
+| `extracts/parliament/` | guide + rules only (no shipped extract) | EP committee texts, if your file has a live EP stage (use the `transcribe-parliament-extract` skill) — **optional layer** |
 | `docs/provisions/` | `gdpr-art33-breach-notification.md` | one page per tracked provision |
 | `docs/instruments/` | `gdpr-2016-679.md` | one page per amended/repealed instrument |
 | `docs/advisory/` | `edpb-edps-jo-2-2026.md` | one digest per advisory-body opinion |
@@ -81,6 +82,22 @@ Two lessons worth baking into your cron prompt:
   `INSIGHT EU MONITORING` source (T2-03, file-agnostic) and filter it on your file's keywords.
 - **New-source baseline rule.** When a source is added to the watchlist later, its first poll has no
   stored hash — instruct the tracker to store the baseline silently instead of opening a false hit.
+
+### Parliament committee-text layer (optional)
+
+The repo also ships a **Parliament committee-text layer** — `extracts/parliament/` (a transcription
+guide + working rules, no shipped extract) plus the **`transcribe-parliament-extract`** skill — for EP
+committee texts (draft opinions, draft reports, tabled amendments). If your file has a live EP stage,
+add committee-document watchlist monitors per the file's [`tracker.yaml`](tracker.yaml)
+`co_legislators.parliament` committees (lead + opinion committees) so new committee documents surface as
+tracker issues; route them with the `resolve-tracker-issue` `parliament-text` playbook. Note that
+`www.europarl.europa.eu/doceo/...` is AWS-WAF-blocked (HTTP 202) to non-browser clients, so the daily
+tracker can detect *that* a document exists but not its operative text — obtain that via a browser
+download or mirror.
+
+**CAVEAT — this layer is OPTIONAL.** Omit it for already-adopted directives / post-adoption files with
+no live EP stage (no committee reading to track): in that case leave `extracts/parliament/` unused and
+skip the EP watchlist monitors.
 
 ## 5. Sanity check
 

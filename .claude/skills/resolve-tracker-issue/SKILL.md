@@ -53,6 +53,24 @@ The entry point is the `/tracker-issue` command (or invoke this skill directly).
    (Watch foreign-language sources especially — check the file number, not just the topic.)
    If it is a `keep_apart` file or otherwise off-topic, the plan's recommendation is to
    **close the issue as not-relevant** — do not edit the repo.
+   - **Scope tie-breaker for EP committee docs.** A committee may opine on *both* sibling files; a
+     PE-number can be mis-attributed by a listing-page summary. Confirm the **interinstitutional
+     reference on the document itself** matches **this** file (`tracker.yaml` `file_id`), not a
+     `keep_apart` sibling, and confirm the **rapporteur** (the same committee can have a different
+     rapporteur on each sibling file). Cross-check OEIL for *both* files before deciding scope.
+   - **Tier-3 can carry Tier-1 substance — upgrade the playbook.** The flagged source's tier sets
+     priority, not the *type* of integration. If a Tier-2/Tier-3 item (NGO/media/Bluesky) surfaces a
+     **primary institutional document** (a Council text, an EP committee opinion/report/amendments, an
+     advisory opinion), do **not** stay on `stakeholder-social` — run the matching `institutional` /
+     `council-text` / `parliament-text` playbook on the underlying document. (A Tier-3 Bluesky post can
+     be the first signal of an EP committee draft opinion.)
+   - **doceo HTTP-202 / WAF workaround.** `www.europarl.europa.eu/doceo/...` (EP committee PDFs and
+     DOCX) returns HTTP 202 with an AWS-WAF JS challenge to all non-browser clients — `curl`/WebFetch
+     get 0 bytes. You can confirm a document's **existence + metadata** via the committee *documents*
+     listing pages and OEIL, but you **cannot fetch its operative text** server-side. Get it via a
+     browser download or a non-WAF mirror. If only metadata/a cover page is confirmed, register
+     **metadata only** and set `pending_operative_text` (below) — do not assert per-provision content
+     from a screenshot or a journalist's summary.
 
 3. **Run the matching playbook** (below) to determine the concrete edits.
 
@@ -88,6 +106,26 @@ A new ST LIMITE compromise text is the heaviest case:
 - Because this spans many files, a `--fix` run here is large; prefer producing the plan and
   letting a human drive the transcription, unless explicitly told to apply.
 
+### `parliament-text` — an EP committee operative text (draft opinion / report / amendments)
+A committee text (a draft opinion, a lead-committee or joint draft report, or tabled amendments — from
+the committees listed in `tracker.yaml` `co_legislators.parliament`) is the Parliament analogue of
+`council-text`. Often it arrives indirectly (via a Tier-2/3 source — see the upgrade rule above)
+because the watchlist's EP coverage is thin.
+- **Confirm scope first** (the tie-breaker above): this repo's `file_id`, correct rapporteur.
+- Register the document in `data/documents.yaml` (`body: Parliament`) → update `sources/README.md`;
+  add a `TIMELINE.md` row and the EP fields in `STATUS.md`.
+- **If the operative text is in hand** (browser download / mirror committed under
+  `sources/parliament/`): **hand transcription to the `transcribe-parliament-extract` skill** — do not
+  transcribe by hand. It produces one `extracts/parliament/<DOC-ID>_<desc>.md` (per-amendment, two-
+  column format — **not** the council consolidated slice-split). Then cascade like `council-text`: the
+  affected `docs/provisions/*.md` Parliament sections **or** `docs/instruments/*.md`, the `parliament`
+  cells in `data/positions.csv`, `docs/institutional-positions.md`, and `STATUS.md`/`docs/what-changed.md`
+  if a tracked outcome moved.
+- **If the operative text is NOT retrievable** (doceo WAF, no mirror): register **metadata only**,
+  make **no per-provision claims**, capture any unconfirmed specifics as a hedged *Next milestones to
+  watch* line, and set the **follow-up trigger** so it re-surfaces (below). This is the correct,
+  faithful stopping point — not a failure.
+
 ### `stakeholder-social` — Tier-2 NGO/media/law-firm or Tier-3 Bluesky
 Judge whether the item is a substantive position/analysis or just commentary:
 - Substantive → add/extend an entry in `docs/stakeholders.md` (and `docs/fault-lines.md`
@@ -106,6 +144,20 @@ Not a content change — a fetch problem. For each listed code:
 
 ### `run-summary` / `skip`
 Suppressed-hits summary issues need no integration — the helper already filters them out.
+
+## Follow-up trigger: `pending_operative_text`
+
+When a document is registered **metadata-only** because its operative text could not be retrieved
+(the doceo/WAF case), leave a machine-detectable marker so the work re-surfaces instead of being
+silently lost:
+- In the `data/documents.yaml` entry, set `pending_operative_text: true` and `access: screenshot-only`
+  (or `cite-only`), with a `notes` line stating what is confirmed (cover-page metadata) vs pending
+  (per-provision content).
+- Add one **Next milestones to watch** line in `STATUS.md` naming the document and the retrieval
+  condition (e.g. "<CMTE> PE-number operative text — pending doceo/mirror").
+- The daily tracker / `--list` treats any `pending_operative_text: true` entry as actionable: when a
+  mirror appears or the file is supplied, run the `parliament-text` (or `council-text`) playbook to
+  build the extract, fill the per-provision cells, and clear the flag.
 
 ## Plan file template
 

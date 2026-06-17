@@ -55,7 +55,7 @@ If no URL/path is given, ask for one (or the document metadata) and stop.
    |---|---|---|
    | Commission | `sources/commission/` | `COM-2025-837_proposal_2025-11-19.docx` |
    | Council (ST / WK / CM) | `sources/council/` | `ST-9547-2026_council-presidency-compromise_2026-05-21.pdf` |
-   | Parliament | `sources/parliament/` | (often link-only — no committed file) |
+   | Parliament | `sources/parliament/` | `<CMTE>-PA-<number>_draft-opinion_<ISO-date>.pdf` (committee operative text — commit it; metadata-only/link if text not retrievable) |
    | EDPB-EDPS | `sources/edpb-edps/` | `EDPB-EDPS-JO-2-2026_opinion_2026-02-10.pdf` |
    | ECB / EESC / CoR (advisory) | `sources/advisory/` | `ECB-CON-2026-9_opinion_2026-03-10.pdf` |
    | a Member State (national gov / non-paper) | `sources/member-states/` | `NL-NONPAPER-2026-04-08_non-paper-gdpr-changes_2026-04-08.pdf` |
@@ -72,6 +72,13 @@ If no URL/path is given, ask for one (or the document metadata) and stop.
    - `access` (omit = fully public). Allowed values seen in the file:
      `cite-only`, `screenshot-only`, `not-public`, `public-released`, `public-via-register`,
      `public-via-journalist`, `public-via-national-parliament`.
+   - `lead_source` (`>-` block, optional) — **credit the lead that surfaced the document** when it
+     reached the repo via something other than its own institutional feed: who/what flagged it
+     (name + handle/outlet), the watchlist code (e.g. a `T3-*` Bluesky source), the tip URL + date,
+     and one clause on why it counts as the lead (e.g. "ahead of any institutional EP-documents feed").
+     Set it whenever the `register-document` run was triggered by a `resolve-tracker-issue` Tier-2/Tier-3
+     hit, or by any external tip-off rather than a Tier-1 institutional source. Render it in the
+     `sources/README.md` row as `lead: [@handle](tip-url) (\`code\`)`.
    - `notes` (`>-` block): what it is, the substantive stance in 2–4 sentences, cross-links to the
      digest/positions page. New `body` values (e.g. `Netherlands`) are allowed.
 
@@ -91,9 +98,16 @@ If no URL/path is given, ask for one (or the document metadata) and stop.
    - Before asserting any feature of "the proposal", check `STATUS.md`'s "What changed"
      table (full version: `docs/what-changed.md`) — several widely-reported features were deleted/moved.
 
-6. **If the document is a full Council compromise text** (a new ST LIMITE text) → register it here, then
-   **hand transcription to the `transcribe-council-extract` skill** for the `extracts/council/` set.
-   Do not transcribe operative text in this skill.
+6. **If the document carries operative text, hand transcription off — don't transcribe here:**
+   - A full **Council compromise text** (a new ST LIMITE text) → **`transcribe-council-extract`**
+     (`extracts/council/` slice set).
+   - An **EP committee text** (a draft opinion, a lead-committee/joint draft report, or tabled
+     amendments — from the committees in `tracker.yaml` `co_legislators.parliament`) →
+     **`transcribe-parliament-extract`** (`extracts/parliament/<DOC-ID>_<desc>.md`, per-amendment).
+     `doceo` bot-blocks automated fetches (HTTP 202 / AWS-WAF) for both PDF and DOCX, so the file must
+     come from a browser download or a non-WAF mirror. If only cover-page metadata is confirmed,
+     register metadata-only and set `pending_operative_text: true` (see `resolve-tracker-issue`) — do
+     not assert operative content from a screenshot or summary.
 
 7. **Link-check.** `python3 .claude/skills/transcribe-council-extract/linkcheck.py .` — must end
    "0 broken". Also sanity-check the YAML:
