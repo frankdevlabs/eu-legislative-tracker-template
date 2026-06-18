@@ -118,6 +118,21 @@ watchlist:
       url: "https://www.edpb.europa.eu/our-work-tools/our-documents/edpbedps-joint-opinion/edpb-edps-joint-opinion-22026-proposal_en"
       document_id: EDPB-EDPS-JO-2-2026
       affects: [docs/advisory/edpb-edps-jo-2-2026.md, docs/institutional-positions.md]
+    T1-14:
+      tier: T1
+      kind: institutional
+      label: "officielebekendmakingen.nl — Kamervragen (vragen + Aanhangsel) [EXEMPLAR — retune per file]"
+      url: "https://zoek.officielebekendmakingen.nl/rss?q=(c.product-area==%22officielepublicaties%22)and(((w.publicatienaam==%22Kamervragen+(Aanhangsel)%22)or(w.publicatienaam==%22Kamervragen+zonder+antwoord%22)))and((cql.textAndIndexes=%22Omnibus%22)and((cql.textAndIndexes=%22privacy%22)or(cql.textAndIndexes=%22gegevensbescherming%22)or(cql.textAndIndexes=%22AVG%22)))&svel=Publicatiedatum&svol=Aflopend"
+      affects: [docs/member-state-positions.md, STATUS.md, TIMELINE.md]
+      notes: >-
+        EXEMPLAR (shown tuned for the Digital Omnibus reference file). A Dutch Kamervragen RSS feed from
+        officielebekendmakingen.nl, ORing the two publicatienaam values 'Kamervragen (Aanhangsel)' (the
+        ah-tk-… answers) and 'Kamervragen zonder antwoord' (the kv-tk-… questions), with file-specific
+        keywords ANDed in via cql.textAndIndexes (single '=', NOT '=='; the '==' exact-phrase form returns 0).
+        Newest-first (svel=Publicatiedatum&svol=Aflopend). When bootstrapping a new tracker, REPLACE the
+        keyword terms with ones specific to that file and verify the feed is small and on-topic before relying
+        on it. kv-tk-…=question filed, ah-tk-…=government answer (incl. uitstel-beantwoording). Route to
+        docs/member-state-positions.md.
     # --- Tier 2: NGO / journalism / law firm -------------------------------
     T2-01:
       tier: T2
