@@ -35,9 +35,10 @@ All paths below are relative to the **repo root**.
 
 EP committee documents live on `www.europarl.europa.eu/doceo/...`. That host returns **HTTP 202 with
 an AWS-WAF JS/CAPTCHA challenge** to every non-browser client — `curl` (any User-Agent) and WebFetch
-get **0 bytes**, for both the `.pdf` and the `.docx`. You **cannot** fetch the operative text
-server-side. Obtain the file one of these ways, then commit it under `sources/parliament/`:
-1. **Browser download** (the browser solves the WAF challenge) — preferred.
+get **0 bytes**, for both the `.pdf` and the `.docx`. A plain `curl`/WebFetch **cannot** fetch the operative text server-side — but the shared fetcher (below) drives a headless browser that does. Obtain the file one of these ways, then commit it under `sources/parliament/`:
+1. **The shared fetcher** (preferred — solves the WAF for you):
+   `python3 $HOME/law-tracker/lib/fetch_blocked_doc.py "<doceo-url>" "sources/parliament/<DOC-ID>_<slug>_<date>.pdf"`
+   It tiers curl-impersonate → headless Chromium (doceo needs the browser tier, which it launches for you). Exit 0 → a validated PDF/DOCX is on disk, proceed. Exit 2/4 → unretrievable, or the fetcher is not set up (`~/law-tracker/lib/SETUP.md`); then fall back to a manual **browser download**.
 2. A **non-WAF mirror** (occasionally EUR-Lex once adopted, or a national-parliament relay). The
    committee *documents* listing pages and OEIL confirm a document's existence + metadata even when the
    PDF body is unreadable — use them to verify, not to transcribe.

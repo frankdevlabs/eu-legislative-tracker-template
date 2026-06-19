@@ -67,8 +67,7 @@ The entry point is the `/tracker-issue` command (or invoke this skill directly).
    - **doceo HTTP-202 / WAF workaround.** `www.europarl.europa.eu/doceo/...` (EP committee PDFs and
      DOCX) returns HTTP 202 with an AWS-WAF JS challenge to all non-browser clients — `curl`/WebFetch
      get 0 bytes. You can confirm a document's **existence + metadata** via the committee *documents*
-     listing pages and OEIL, but you **cannot fetch its operative text** server-side. Get it via a
-     browser download or a non-WAF mirror. If only metadata/a cover page is confirmed, register
+     listing pages and OEIL, but a plain `curl`/WebFetch **cannot fetch its operative text** server-side. **First run the shared fetcher** (it drives a headless browser and solves the WAF): `python3 $HOME/law-tracker/lib/fetch_blocked_doc.py "<doceo-url>" "sources/parliament/<DOC-ID>_<slug>_<date>.pdf"` — exit 0 → the operative text is in hand, hand off to `transcribe-parliament-extract`; exit 2/4 → genuinely unretrievable or the fetcher is not set up (`~/law-tracker/lib/SETUP.md`), then fall back to a manual browser download or a non-WAF mirror. If only metadata/a cover page is confirmed, register
      **metadata only** and set `pending_operative_text` (below) — do not assert per-provision content
      from a screenshot or a journalist's summary.
 

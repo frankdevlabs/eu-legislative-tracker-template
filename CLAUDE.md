@@ -101,8 +101,7 @@ Two recurring traps:
   listing-page summary can mis-attribute a row; the cover page is the tie-breaker.
 - **doceo is WAF-blocked.** `www.europarl.europa.eu/doceo/...` returns HTTP 202 (AWS-WAF JS challenge)
   to all non-browser clients, for both `.pdf` and `.docx` — `curl`/WebFetch get 0 bytes. Confirm
-  existence/metadata via the committee *documents* pages and OEIL, but obtain the operative text via a
-  **browser download** or a non-WAF mirror, commit it under `sources/parliament/`, then transcribe. If
+  existence/metadata via the committee *documents* pages and OEIL, but obtain the operative text with the shared fetcher — `python3 $HOME/law-tracker/lib/fetch_blocked_doc.py "<doceo-url>" "sources/parliament/<DOC-ID>_<slug>_<date>.pdf"` (tiers curl-impersonate → headless Chromium and solves the AWS-WAF; setup in `~/law-tracker/lib/SETUP.md`) — commit it under `sources/parliament/`, then transcribe. If the fetcher fails, fall back to a manual browser download or a non-WAF mirror. If
   only metadata is confirmed, register metadata-only and set `pending_operative_text: true` — never
   assert per-provision content from a screenshot or a journalist's summary.
 
