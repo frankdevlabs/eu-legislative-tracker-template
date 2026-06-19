@@ -132,6 +132,15 @@ Judge whether the item is a substantive position/analysis or just commentary:
   cross-linking the relevant `docs/provisions/*`.
 - Pure commentary / off-topic → recommend closing the issue; no repo edit.
 
+**Primary government position document → register + commit it (do NOT stop at cite-by-URL).** A
+national-government **position letter** (e.g. a Dutch *Kamerbrief*), a **BNC-fiche**, or a **non-paper**
+that states a Member State's *own* stance / negotiating line on the file is a **primary source**, not
+reportage — register it in `data/documents.yaml` and commit it under `sources/member-states/`, then
+route the substance to `docs/member-state-positions.md`. These are almost always fetchable
+(officielebekendmakingen.nl / tweedekamer.nl downloads, no WAF). Distinguish from **procedural
+reportage** — parliamentary *debate reports*, another institution's *reaction/cover letter*, meeting
+minutes — which stays analysis-layer (TIMELINE + positions, cited by URL).
+
 ### `source-health` — the weekly `[tracker] Source health` issue (or a state-blocked issue)
 Not a content change — a fetch problem. For each listed code:
 - Check its `url` in `tracker.yaml` (`watchlist.sources`) and `data/documents.yaml`. Is it stale,

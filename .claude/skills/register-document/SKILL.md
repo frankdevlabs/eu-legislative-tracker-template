@@ -93,7 +93,7 @@ If no URL/path is given, ask for one (or the document metadata) and stop.
      `docs/institutional-positions.md`.
    - **Member-state / national-government position** → add a section to
      `docs/member-state-positions.md` (its own clearly-attributed block for national non-papers, separate
-     from the `WK` delegation stream) and cross-link the relevant `docs/provisions/*.md`.
+     from the `WK` delegation stream) and cross-link the relevant `docs/provisions/*.md`. A national-government **position letter** stating a Member State's own stance — a Dutch *Kamerbrief*, a **BNC-fiche**, a **non-paper** — is itself a primary source: commit it here, not merely a URL citation; procedural reportage (debate reports, another institution's reaction/cover letter) stays analysis-layer.
    - Stakeholder → `docs/stakeholders.md` (+ `docs/fault-lines.md` for noyb/EDRi).
    - Before asserting any feature of "the proposal", check `STATUS.md`'s "What changed"
      table (full version: `docs/what-changed.md`) — several widely-reported features were deleted/moved.
