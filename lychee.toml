@@ -13,4 +13,5 @@ exclude = [
   "^https://www\\.linkedin\\.com",             # blocks automated access
   "^https://aichamber\\.eu",                   # PDF host times out for automated clients (stakeholder open letter)
   "^https://netzpolitik\\.org/wp-upload/",     # LIMITE mirror PDFs; slow/bot-blocking (cited copies, not asserted live)
+  "^https://zoek\\.officielebekendmakingen\\.nl",  # Dutch Kamervragen RSS query URLs (watchlist feeds, not asserted live)
 ]
